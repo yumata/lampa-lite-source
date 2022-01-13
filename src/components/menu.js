@@ -65,7 +65,7 @@ function ready(){
 
         if(action == 'movie' || action == 'tv' || action == 'anime'){
             Activity.push({
-                url: Storage.field('source') == 'cub' ? '?cat='+action+'&sort=top&limit=40' : action + '/popular',
+                url: Storage.field('source') == 'cub' ? '?cat='+action+'&sort=top&results=30' : action + '/popular',
                 title: (action == 'movie' ? 'Фильмы' : action == 'anime' ? 'Аниме' : 'Сериалы') + ' - ' + Storage.field('source').toUpperCase(),
                 component: 'category_full',
                 source: action == 'anime' ? 'cub' : Storage.field('source'),
@@ -131,7 +131,7 @@ function catalog(){
             items: menu,
             onSelect: (a)=>{
                 Activity.push({
-                    url: Storage.field('source') == 'cub' ? '?sort=top&limit=40' : 'movie/popular',
+                    url: Storage.field('source') == 'cub' ? '?sort=top&results=30' : 'movie/popular',
                     title: 'Каталог - ' + a.title,
                     component: 'category_full',
                     genres: a.id,

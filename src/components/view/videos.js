@@ -146,6 +146,7 @@ function create(data, params = {}){
                         }
 
                         Player.play(json)
+                        Player.playlist([json.url])
 
                         if(data.movie.id) Favorite.add('history', data.movie, 100)
                     }
@@ -157,8 +158,11 @@ function create(data, params = {}){
                             title: 'Выбрать',
                             items: json.items,
                             onSelect: (a)=>{
-                                if(a.method == 'play') Player.play(a)
-                                else if(a.method == 'link') this.get(a.url,true)
+                                if(a.method == 'play'){
+                                    Player.play(a)
+                                    Player.playlist([json.url])
+                                } 
+                                else if(a.method == 'link' && a.url) this.get(a.url,true)
                             },
                             onBack: ()=>{
                                 Controller.toggle('view_videos')

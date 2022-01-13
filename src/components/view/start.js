@@ -41,8 +41,8 @@ function create(data, params = {}){
             html.find('.is--serial').removeClass('hide')
         }
 
-        html.find('.info__icon').on('hover:enter',(e)=>{
-            let type = $(e.target).data('type')
+        html.find('.view__favorite > *').on('hover:enter',(e)=>{
+            let type = $(e.target).data('name')
 
             params.object.card        = data.movie
             params.object.card.source = params.object.source
