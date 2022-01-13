@@ -1,0 +1,10 @@
+.search-box{
+    flex-direction: column;
+    padding: $offset;
+    align-items: center;
+    justify-content: center;
+
+    &__keypad{
+        width: 50%;
+    }
+}

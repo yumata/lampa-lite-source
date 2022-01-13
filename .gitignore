@@ -1,0 +1,11 @@
+bot/
+build/
+build/web/
+dest/
+plugins/clear
+index/
+node_modules/
+svg/
+temp/
+.idea/
+package-lock.json

@@ -1,0 +1,15 @@
+.category-full{
+    padding: 0 math.div($offset, 2);
+
+    .card{
+        margin: 0 math.div($offset, 2);
+        width: 17.8%;
+        float: left;
+    }
+
+    &:after{
+        content: '';
+        display: block;
+        clear: both;
+    }
+}

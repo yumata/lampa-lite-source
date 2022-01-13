@@ -1,0 +1,91 @@
+.view{
+    padding: 0 $offset;
+    padding-bottom: 2.5em;
+
+    &__body{
+        float: left;
+        width: 80%;
+    }
+
+    &__right{
+        padding-left: 1em;
+        width: 20%;
+        float: left
+    }
+
+    &__title{
+        font-size: 2.4em;
+    }
+
+    &__details{
+        font-size: 1.2em;
+        font-weight: 300;
+        margin-top: 1em;
+
+        span{
+            margin-right: 1em;
+        }
+    }
+
+    &__descr{
+        font-size: 1.2em;
+        font-weight: 300;
+        margin-top: 1.7em;
+        line-height: 1.4;
+        padding-right: 3em;
+    }
+
+    &__favorite{
+        margin-top: 2em;
+
+        > div{
+            float: left;
+            width: 4em;
+            height: 3em;
+            border-radius: 0.3em;
+            border: 0.2em solid #3b3d48;
+            background-color: #3b3d48;
+            background-position: 50% 50%;
+            background-size: 1.4em;
+            background-repeat: no-repeat;
+            margin-right: 1em;
+
+            &[data-name="book"]{
+                background-image: url(../img/icons/menu/bookmark.svg);
+            }
+
+            &[data-name="like"]{
+                background-image: url(../img/icons/menu/like.svg);
+            }
+
+            &[data-name="wath"]{
+                background-image: url(../img/icons/menu/time.svg);
+            }
+
+            &.focus{
+                border-color: #d81f26;
+            }
+
+            &.active{
+                background-color: #d81f26;
+                border-color: #d81f26;
+
+                &.focus{
+                    border-color: #fff;
+                }
+            }
+        }
+
+        &:after{
+            content: '';
+            display: block;
+            clear: both;
+        }
+    }
+
+    &:after{
+        content: '';
+        display: block;
+        clear: both;
+    }
+}

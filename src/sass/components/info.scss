@@ -1,0 +1,64 @@
+.info{
+    height: 10em;
+    padding: 2em $offset;
+    align-items: flex-start;
+    padding-top: 1em;
+
+    &__title{
+        font-size: 3.1em;
+        font-weight: 700;
+        line-height: 1.2;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+
+        &-original{
+            font-size: 1.8em;
+            margin-top: 0.4em;
+        }
+    }
+
+    &__right{
+        flex-shrink: 0;
+        display: flex;
+        padding-top: 1em;
+    }
+
+    &__create{
+        font-size: 1.2em;
+        margin-top: 1em;
+    }
+
+
+    &__icon{
+        flex-shrink: 0;
+        margin-left: 1em;
+        background-position: 50% 50%;
+        background-repeat: no-repeat;
+        background-size: 50%;
+        position: relative;
+        width: 4em;
+        height: 4em;
+        border-radius: 100%;
+
+        &.active{
+            background-color: #d81f26;
+        }
+
+        &.icon{
+            &--book{
+                background-image: url(../img/icons/menu/bookmark.svg);
+            }
+            &--like{
+                background-image: url(../img/icons/menu/like.svg);
+            }
+            &--wath{
+                background-image: url(../img/icons/menu/time.svg);
+            }
+        }
+
+        &.focus{
+            box-shadow: 0 0 0 0.3em #fff;
+        }
+    }
+}

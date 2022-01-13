@@ -1,0 +1,34 @@
+.card-more{
+    flex-shrink: 0;
+    margin-left: 2em;
+    
+    &__inner{
+        background-color: #2d2e35;
+        padding-bottom: 146%;
+        position: relative;
+    }
+
+    &__title{
+        position: absolute;
+        top: 50%;
+        left: 0;
+        right: 0;
+        text-align: center;
+        font-size: 1.8em;
+        font-weight: 300;
+        margin-top: -0.5em;
+    }
+
+    &.focus{
+        .card-more__inner:after{
+            content: '';
+            display: block;
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            border: 0.3em solid #d81f26
+        }
+    }
+}
