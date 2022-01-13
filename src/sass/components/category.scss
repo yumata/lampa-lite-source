@@ -7,6 +7,23 @@
         float: left;
     }
 
+    &__more{
+        text-align: center;
+        padding: 2em;
+        margin: 0.9em;
+        clear: both;
+        background-color: #3b3d48;
+        border: 0.3em solid transparent;
+
+        > span{
+            font-size: 1.2em;
+        }
+
+        &.focus{
+            border-color: #D81F26;
+        }
+    }
+
     &:after{
         content: '';
         display: block;

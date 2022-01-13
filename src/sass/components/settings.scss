@@ -17,7 +17,6 @@
         position: fixed;
         top: 0;
         right: -100%;
-        transition: right 0.3s;
         background: #2d2f38;
         width: 35%;
         display: flex;
@@ -47,7 +46,6 @@
     &-folder{
         padding: 1.5em 2em;
         display: flex;
-        transition: background-color 0.3s;
 
         &__icon{
             flex-shrink: 0;
@@ -68,7 +66,6 @@
 
     &-param{
         padding: 1.5em 2em;
-        transition: background-color 0.3s;
         position: relative;
 
         &__name{

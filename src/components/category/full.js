@@ -17,7 +17,6 @@ function component(object){
     let total_pages = 0
     let info
     let last
-    let waitload
     
     
     this.create = function(){
@@ -38,24 +37,6 @@ function component(object){
         return this.render()
     }
 
-    this.next = function(){
-        if(waitload) return
-
-        if(object.page < 15 && object.page < total_pages){
-            waitload = true
-
-            object.page++
-
-            Api.list(object,(result)=>{
-                this.append(result)
-
-                waitload = false
-
-                Controller.enable('content')
-            },()=>{})
-        }
-    }
-
     this.append = function(data){
         data.results.forEach(element => {
             let card = new Card(element, {
@@ -70,10 +51,6 @@ function component(object){
                 scroll.update(card.render(), true)
 
                 info.update(card_data)
-
-                let maxrow = Math.ceil(items.length / 7) - 1
-
-                if(Math.ceil(items.indexOf(card) / 7) >= maxrow) this.next()
             }
 
             card.onEnter = (target, card_data)=>{
@@ -109,11 +86,33 @@ function component(object){
 
         this.append(data)
 
+        this.more()
+
         scroll.append(body)
 
         this.activity.loader(false)
 
         this.activity.toggle()
+    }
+
+    this.more = function(){
+        let more = $('<div class="category-full__more selector"><span>Еще</span></div>')
+
+        more.on('hover:enter',()=>{
+            let next = Arrays.clone(object)
+
+            delete next.activity
+
+            next.page++
+
+            Activity.push(next)
+        }).on('hover:focus',(e)=>{
+            last = e.target
+
+            scroll.update($(e.target), true)
+        })
+
+        body.append(more)
     }
 
 

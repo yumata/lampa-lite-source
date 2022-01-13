@@ -15,16 +15,14 @@ function component(object){
     let items   = []
     let html    = $('<div></div>')
     let body    = $('<div class="category-full"></div>')
-    let total_pages = 0
     let info
     let last
-    let relises = []
     
     
     this.create = function(){
         this.activity.loader(true)
 
-        Api.relise(this.build.bind(this),()=>{
+        Api.relise({page:object.page},this.build.bind(this),()=>{
             let empty = new Empty()
 
             html.append(empty.render())
@@ -39,18 +37,6 @@ function component(object){
         return this.render()
     }
 
-    this.next = function(){
-        if(object.page < 15 && object.page < total_pages){
-
-            object.page++
-
-            let offset = object.page - 1
-
-            this.append(relises.slice(20 * offset,20 * offset + 20))
-
-            Controller.enable('content')
-        }
-    }
 
     this.append = function(data){
         data.forEach(element => {
@@ -63,10 +49,6 @@ function component(object){
                     scroll.update(card.render(), true)
 
                     info.update(card_data)
-
-                    let maxrow = Math.ceil(items.length / 7) - 1
-
-                    if(Math.ceil(items.indexOf(card) / 7) >= maxrow) this.next()
                 }
 
                 card.onEnter = (target, card_data)=>{
@@ -95,10 +77,6 @@ function component(object){
     }
 
     this.build = function(data){
-        relises = data
-
-        total_pages = Math.ceil(relises.length / 20)
-
         info = new Info()
 
         info.create()
@@ -108,13 +86,35 @@ function component(object){
         html.append(info.render())
         html.append(scroll.render())
 
-        this.append(relises.slice(0,20))
+        this.append(data)
+
+        this.more()
 
         scroll.append(body)
 
         this.activity.loader(false)
 
         this.activity.toggle()
+    }
+
+    this.more = function(){
+        let more = $('<div class="category-full__more selector"><span>Еще</span></div>')
+
+        more.on('hover:enter',()=>{
+            let next = Arrays.clone(object)
+
+            delete next.activity
+
+            next.page++
+
+            Activity.push(next)
+        }).on('hover:focus',(e)=>{
+            last = e.target
+
+            scroll.update($(e.target), true)
+        })
+
+        body.append(more)
     }
 
 

@@ -83,8 +83,8 @@ function favorite(params = {}, oncomplite, onerror){
     else onerror()
 }
 
-function relise(oncomplite, onerror){
-    network.silent(Utils.protocol() + 'tmdb.cub.watch?sort=releases&results=200',(json)=>{
+function relise(params = {}, oncomplite, onerror){
+    network.silent(Utils.protocol() + 'tmdb.cub.watch?sort=releases&results=40&page='+params.page,(json)=>{
         json.results.forEach((item)=>{
             item.tmdbID = item.id
         })
