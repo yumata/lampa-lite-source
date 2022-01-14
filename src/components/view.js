@@ -88,8 +88,6 @@ function component(object){
 
         if(active < 0){
             active = 0
-
-            Controller.toggle('head')
         }
         else{
             items[active].toggle()

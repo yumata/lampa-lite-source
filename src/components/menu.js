@@ -42,7 +42,6 @@ function init(){
         },
         up: ()=>{
             if(Navigator.canmove('up')) Navigator.move('up')
-            else Controller.toggle('head')
         },
         down: ()=>{
             Navigator.move('down')

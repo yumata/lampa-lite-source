@@ -79,7 +79,8 @@ function component(object){
 
         info.create()
 
-        scroll.render().addClass('layer--wheight').data('mheight', info.render())
+        scroll.render()
+        scroll.minus(info.render())
 
         html.append(info.render())
         html.append(scroll.render())
@@ -108,8 +109,6 @@ function component(object){
             Activity.push(next)
         }).on('hover:focus',(e)=>{
             last = e.target
-
-            //scroll.update($(e.target), true)
         })
 
         body.append(more)
@@ -131,7 +130,6 @@ function component(object){
             },
             up: ()=>{
                 if(Navigator.canmove('up')) Navigator.move('up')
-                else Controller.toggle('head')
             },
             down: ()=>{
                 if(Navigator.canmove('down')) Navigator.move('down')
@@ -164,6 +162,8 @@ function component(object){
         scroll.destroy()
         
         if(info) info.destroy()
+
+        Api.clear()
 
         html.remove()
         body.remove()

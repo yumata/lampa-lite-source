@@ -16,10 +16,10 @@ function init(){
         if (e.code == 38 || e.code == 29460) {
             let enable = Controller.enabled()
 
-            if(enable.name == 'head'){
+            if(enable.name == 'menu'){
                 times++
                 
-                if(times > 10){
+                if(times > 25){
                     Controller.toggle('console')
                 }
             }
@@ -49,7 +49,7 @@ function init(){
 
             html.remove()
 
-            Controller.toggle('head')
+            Controller.toggle('menu')
         }
     })
 

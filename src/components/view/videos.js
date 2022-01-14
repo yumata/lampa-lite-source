@@ -160,7 +160,7 @@ function create(data, params = {}){
                             onSelect: (a)=>{
                                 if(a.method == 'play'){
                                     Player.play(a)
-                                    Player.playlist([json.url])
+                                    Player.playlist([a.url])
                                 } 
                                 else if(a.method == 'link' && a.url) this.get(a.url,true)
                             },
@@ -262,13 +262,23 @@ function create(data, params = {}){
     }
 
     this.destroy = function(){
-        last = null
+        network.clear()
 
         scroll.destroy()
 
         Storage.listener.remove('change',follow)
 
         html.remove()
+        body.remove()
+        plugins.remove()
+
+        last    = null
+        network = null
+        scroll  = null
+        html    = null
+        body    = null
+        plugins = null
+        history = null
     }
 }
 
