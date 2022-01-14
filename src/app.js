@@ -166,14 +166,14 @@ function startApp(){
 
     $('body').addClass('platform--'+Platform.get())
 
-    /*if(Platform.is('orsay')){
+    if(Platform.is('orsay')){
         Utils.putStyle([
-            'http://lampa.mx/css/app.css'
+            'http://lite.lampa.mx/css/app.css'
         ],()=>{
             $('link[href="css/app.css"]').remove()
         })
     }
-    else */if(window.location.protocol == 'file:'){
+    else if(window.location.protocol == 'file:'){
         Utils.putStyle([
             'https://yumata.github.io/lampa-lite/css/app.css'
         ],()=>{
