@@ -51,6 +51,8 @@ function init(){
         save('remove', e.where, e.card)
     })
 
+    updateBookmarks(Storage.get('account_bookmarks','[]'))
+
     update()
 }
 
