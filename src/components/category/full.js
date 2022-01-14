@@ -109,7 +109,7 @@ function component(object){
         }).on('hover:focus',(e)=>{
             last = e.target
 
-            scroll.update($(e.target), true)
+            //scroll.update($(e.target), true)
         })
 
         body.append(more)

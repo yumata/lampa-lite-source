@@ -15,15 +15,20 @@
     }
 
     &__view{
-        margin-bottom: 1em;
-        padding-bottom: 146%;
+        margin-bottom: 0.5em;
+        padding-bottom: 140%;
         position: relative;
     }
 
     &__title{
         font-size: 1.2em;
         height: 3.1em;
-        overflow: hidden;
+
+        span{
+            display: block;
+            height: 2em;
+            overflow: hidden;
+        }
     }
 
     &__icons{
