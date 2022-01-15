@@ -9,6 +9,8 @@ import Storage from '../../utils/storage'
 import Timeline from '../../interaction/timeline'
 import Utils from '../../utils/math'
 import Favorite from '../../utils/favorite'
+import Modal from '../../interaction/modal'
+import Template from '../../interaction/template'
 
 function create(data, params = {}){
     let network = new Reguest()
@@ -119,6 +121,55 @@ function create(data, params = {}){
         })
     }
 
+    this.call = function(target, json){
+        if(json.method == 'play'){
+            if(target.data('timeline')){
+                json.timeline = target.data('timeline')
+            }
+
+            Player.play(json)
+            Player.playlist([json.url])
+
+            if(data.movie.id) Favorite.add('history', data.movie, 100)
+        }
+        else if(json.method == 'link' && json.url){
+            this.get(json.url,true)
+        }
+        else if(json.method == 'call' && json.url){
+            function close(){
+                Modal.close()
+        
+                network.clear()
+
+                Controller.toggle('view_videos')
+            }
+
+            Modal.open({
+                title: '',
+                html: Template.get('modal_loading'),
+                size: 'small',
+                mask: true,
+                onBack: close
+            })
+
+            network.silent(json.url,(result)=>{
+                this.call(target, result)
+            },close)
+        }
+        else if(json.method == 'select'){
+            Select.show({
+                title: 'Выбрать',
+                items: json.items,
+                onSelect: (a)=>{
+                    this.call(target, a)
+                },
+                onBack: ()=>{
+                    Controller.toggle('view_videos')
+                }
+            })
+        }
+    }
+
     this.get = function(link, push_history){
         this.load()
 
@@ -139,37 +190,7 @@ function create(data, params = {}){
 
                     scroll.update($(this), true)
                 }).on('hover:enter',(e)=>{
-                    let json = Arrays.decodeJson($(e.target).attr('data-json'),{})
-
-                    if(json.method == 'play'){
-                        if($(e.target).data('timeline')){
-                            json.timeline = $(e.target).data('timeline')
-                        }
-
-                        Player.play(json)
-                        Player.playlist([json.url])
-
-                        if(data.movie.id) Favorite.add('history', data.movie, 100)
-                    }
-                    else if(json.method == 'link' && json.url){
-                        this.get(json.url,true)
-                    }
-                    else if(json.method == 'select'){
-                        Select.show({
-                            title: 'Выбрать',
-                            items: json.items,
-                            onSelect: (a)=>{
-                                if(a.method == 'play'){
-                                    Player.play(a)
-                                    Player.playlist([a.url])
-                                } 
-                                else if(a.method == 'link' && a.url) this.get(a.url,true)
-                            },
-                            onBack: ()=>{
-                                Controller.toggle('view_videos')
-                            }
-                        })
-                    }
+                    this.call($(e.target), Arrays.decodeJson($(e.target).attr('data-json'),{}))
                 })
 
                 body.find('[media]').each(function(){
