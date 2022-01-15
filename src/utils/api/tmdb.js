@@ -176,29 +176,13 @@ function category(params = {}, oncomplite, onerror){
 }
 
 function full(params = {}, oncomplite, onerror){
-    let status = new Status(5)
+    let status = new Status(1)
         status.onComplite = oncomplite
 
     get(params.method+'/'+params.id,params,(json)=>{
         json.source = 'tmdb'
         
         status.append('movie', json)
-    },status.error.bind(status))
-
-    get(params.method+'/'+params.id+'/credits',params,(json)=>{
-        status.append('persons', json)
-    },status.error.bind(status))
-
-    get(params.method+'/'+params.id+'/recommendations',params,(json)=>{
-        status.append('recomend', json)
-    },status.error.bind(status))
-
-    get(params.method+'/'+params.id+'/similar',params,(json)=>{
-        status.append('simular', json)
-    },status.error.bind(status))
-
-    get(params.method+'/'+params.id+'/videos',params,(json)=>{
-        status.append('videos', json)
     },status.error.bind(status))
 }
 
