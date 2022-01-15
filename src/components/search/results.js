@@ -113,6 +113,10 @@ function create(){
         scroll.update(items[active].render())
     }
 
+    this.any = function(){
+        return items.length
+    }
+
     this.clear = function(){
         scroll.reset()
         scroll.append('<div class="selector" style="opacity: 0"></div>')

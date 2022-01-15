@@ -48,7 +48,7 @@ function component(object){
             card.onFocus = (target, card_data)=>{
                 last = target
 
-                scroll.update(card.render(), true)
+                scroll.update(card.render(), false)
 
                 info.update(card_data)
             }
@@ -97,9 +97,11 @@ function component(object){
     }
 
     this.more = function(){
-        let more = $('<div class="category-full__more selector"><span>Еще</span></div>')
+        let more = $('<div class="category-full__more selector"><span>Показать еще</span></div>')
 
-        more.on('hover:enter',()=>{
+        more.on('hover:focus',(e)=>{
+            Controller.collectionFocus(last || false,scroll.render())
+
             let next = Arrays.clone(object)
 
             delete next.activity
@@ -107,8 +109,6 @@ function component(object){
             next.page++
 
             Activity.push(next)
-        }).on('hover:focus',(e)=>{
-            last = e.target
         })
 
         body.append(more)

@@ -74,9 +74,9 @@ function component(object){
 
                 info.update(card_data)
 
-                let maxrow = Math.ceil(items.length / 7) - 1
+                let maxrow = Math.ceil(items.length / 5) - 1
 
-                if(Math.ceil(items.indexOf(card) / 7) >= maxrow) this.next()
+                if(Math.ceil(items.indexOf(card) / 5) >= maxrow) this.next()
             }
 
             card.onEnter = (target, card_data)=>{
@@ -163,7 +163,8 @@ function component(object){
 
         info.create()
 
-        scroll.render().addClass('layer--wheight').data('mheight', info.render())
+        scroll.render()
+        scroll.minus(info.render())
 
         html.append(info.render())
         html.append(scroll.render())
@@ -218,6 +219,8 @@ function component(object){
     }
 
     this.clear = function(){
+        Api.clear()
+        
         network.clear()
 
         Arrays.destroy(items)

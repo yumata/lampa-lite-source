@@ -47,6 +47,10 @@ function create(){
         }
     }
 
+    this.any = function(){
+        return keys.length
+    }
+
     this.toggle = function(){
         Controller.add('search_history',{
             toggle: ()=>{
