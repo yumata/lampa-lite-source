@@ -96,6 +96,8 @@ function bind(){
         listener.send('timeupdate', {duration: video.duration, current: video.currentTime})
 
         scale()
+
+        if(customsubs) customsubs.update(video.currentTime)
     })
 
     // обновляем субтитры
@@ -260,7 +262,13 @@ function customSubs(subs){
         })
     })
 
+    let index = -1
+
     subs.forEach((sub)=>{
+        index++
+
+        if(typeof sub.index == 'undefined') sub.index = index
+
         if(!sub.ready){
             sub.ready = true
 
