@@ -114,6 +114,10 @@ function ready(){
                 page: 1
             })
         }
+
+        html.find('.selector').removeClass('active')
+
+        $(e.target).addClass('active')
     }).on('hover:focus',(e)=>{
         last = e.target
 
