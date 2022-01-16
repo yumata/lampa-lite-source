@@ -130,6 +130,8 @@ function create(data, params = {}){
             Player.play(json)
             Player.playlist([json.url])
 
+            if(json.subtitles) Player.subtitles(json.subtitles)
+
             if(data.movie.id) Favorite.add('history', data.movie, 100)
         }
         else if(json.method == 'link' && json.url){
@@ -153,6 +155,8 @@ function create(data, params = {}){
             })
 
             network.silent(json.url,(result)=>{
+                close()
+
                 this.call(target, result)
             },close)
         }
