@@ -112,6 +112,12 @@ function component(object){
         Controller.toggle('content')
     }
 
+    this.parse = function(){
+        if(items.length){
+            items[1].parse()
+        }
+    }
+
     this.pause = function(){
         
     }
@@ -125,6 +131,8 @@ function component(object){
     }
 
     this.destroy = function(){
+        Lampa.Listener.send('view',{type:'destroy',object})
+
         network.clear()
 
         Arrays.destroy(items)

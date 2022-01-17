@@ -111,6 +111,10 @@ function Activity(component){
         slide.detach()
     }
 
+    this.component = function(){
+        return component
+    }
+
     /**
      * Рендер
      */

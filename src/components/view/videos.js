@@ -174,6 +174,30 @@ function create(data, params = {}){
         }
     }
 
+    this.parse = function(){
+        body.find('.selector').on('hover:focus',function(){
+            last = $(this)[0]
+
+            scroll.update($(this), true)
+        }).on('hover:enter',(e)=>{
+            this.call($(e.target), Arrays.decodeJson($(e.target).attr('data-json'),{}))
+        })
+
+        body.find('[media]').each(function(){
+            let media = $(this)
+
+            let season  = parseInt(media.attr('s') || '1'),
+                episode = parseInt(media.attr('e') || '1')
+
+            let hash = Utils.hash(data.movie.name ? [season,episode,data.movie.original_title].join('') : data.movie.original_title)
+            let view = Timeline.view(hash)
+
+            media.data('timeline',view)
+
+            media.append(Timeline.render(view))
+        })
+    }
+
     this.get = function(link, push_history){
         this.load()
 
@@ -189,27 +213,7 @@ function create(data, params = {}){
             if(result.trim()){
                 body.append(result)
 
-                body.find('.selector').on('hover:focus',function(){
-                    last = $(this)[0]
-
-                    scroll.update($(this), true)
-                }).on('hover:enter',(e)=>{
-                    this.call($(e.target), Arrays.decodeJson($(e.target).attr('data-json'),{}))
-                })
-
-                body.find('[media]').each(function(){
-                    let media = $(this)
-
-                    let season  = parseInt(media.attr('s') || '1'),
-                        episode = parseInt(media.attr('e') || '1')
-
-                    let hash = Utils.hash(data.movie.name ? [season,episode,data.movie.original_title].join('') : data.movie.original_title)
-                    let view = Timeline.view(hash)
-
-                    media.data('timeline',view)
-
-                    media.append(Timeline.render(view))
-                })
+                this.parse()
 
                 Controller.enable('view_videos')
             }

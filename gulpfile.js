@@ -73,8 +73,26 @@ function merge(done) {
     done();
 }
 
+function bubbleFile(name){
+    let plug = [babel({
+        presets: ['@babel/preset-env']
+    }), commonjs, nodeResolve]
+
+    rollup({
+        input: plgFolder+name,
+        plugins: plug,
+        output: {
+          format: 'iife',
+        }
+      })
+      .pipe(source(name))
+      .pipe(buffer())
+      .pipe(dest(dstFolder));
+}
+
 function plugins(done) {
-    
+    bubbleFile('bazon/bazon.js')
+
     done()
 }
 
@@ -87,6 +105,7 @@ function build_web(done){
     //таймер сила!
     copy_timer = setTimeout(()=>{
         src([dstFolder+'app.js']).pipe(dest(bulFolder+'web/'));
+        src([dstFolder+'bazon/bazon.js']).pipe(dest(bulFolder+'web/plugins'));
     },500)
 
     done();
