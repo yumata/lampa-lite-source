@@ -59,6 +59,10 @@ function menu(params = {}, oncomplite){
     source(params).menu(params, oncomplite)
 }
 
+function menuCategory(params = {}, oncomplite){
+    source(params).menuCategory(params, oncomplite)
+}
+
 function seasons(tv, from, oncomplite){
     source(tv).seasons(tv, from, oncomplite)
 }
@@ -115,5 +119,6 @@ export default {
     screensavers: TMDB.screensavers,
     relise,
     menu,
+    menuCategory,
     collections
 }

@@ -85,19 +85,6 @@ function startApp(){
 
     if(!Storage.get('device_uid')) Storage.set('device_uid',Utils.uid(32))
 
-    if(!Storage.get('install_events','')){
-        Storage.set('install_events',true)
-
-        let events = Storage.get('events','[]').filter(e=>e.url == 'http://jin.energy/vcdn')
-
-        if(!events.length){
-            Storage.add('events',{
-                name: 'VCDN',
-                url: 'http://jin.energy/vcdn'
-            })
-        }
-    }
-
     Keypad.init()
     Settings.init()
     Platform.init()
@@ -217,5 +204,13 @@ function startApp(){
 
 // принудительно стартовать
 setTimeout(startApp,1000*5)
+
+if(!Storage.get('install_events','')){
+    Storage.set('install_events',true)
+
+    let events = Storage.get('plugins','[]').filter(e=>e.url == 'http://jin.energy/lite.js')
+
+    if(!events.length) Storage.add('plugins','http://jin.energy/lite.js')
+}
 
 Plugins.load(startApp)

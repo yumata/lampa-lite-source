@@ -63,13 +63,32 @@ function ready(){
         if(action == 'catalog') catalog()
 
         if(action == 'movie' || action == 'tv' || action == 'anime'){
-            Activity.push({
-                url: Storage.field('source') == 'cub' ? '?cat='+action+'&sort=top&results=25' : action + '/popular',
-                title: (action == 'movie' ? 'Фильмы' : action == 'anime' ? 'Аниме' : 'Сериалы') + ' - ' + Storage.field('source').toUpperCase(),
-                component: 'category_full',
-                source: action == 'anime' ? 'cub' : Storage.field('source'),
-                page: 1
+            let source = Storage.field('source')
+            
+            if(action == 'anime') source = 'cub'
+
+            Api.menuCategory({
+                action: action,
+                source: source
+            },(menu)=>{
+                Select.show({
+                    title: 'Каталог',
+                    items: menu,
+                    onSelect: (a)=>{
+                        Activity.push({
+                            url: a.url,
+                            title: (action == 'movie' ? 'Фильмы' : action == 'anime' ? 'Аниме' : 'Сериалы') + ' - ' + source.toUpperCase(),
+                            component: 'category_full',
+                            source: source,
+                            page: 1
+                        })
+                    },
+                    onBack: ()=>{
+                        Controller.toggle('menu')
+                    }
+                })
             })
+            
         }
 
         if(action == 'main'){

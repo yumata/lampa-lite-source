@@ -175,6 +175,51 @@ function category(params = {}, oncomplite, onerror){
     },status.error.bind(status))
 }
 
+function menuCategory(params, oncomplite){
+    let menu = []
+
+    menu.push({
+        title: 'Сейчас смотрят',
+        url: params.action+'/now_playing'
+    })
+
+    menu.push({
+        title: 'Популярное',
+        url: params.action+'/popular'
+    })
+
+    let date  = new Date()
+    let query = []
+        query.push('sort_by=release_date.desc')
+        query.push('year='+date.getFullYear())
+        query.push('first_air_date_year='+date.getFullYear())
+        query.push('vote_average.gte=7')
+
+    menu.push({
+        title: 'Новинки',
+        url: 'discover/'+params.action+'?'+query.join('&')
+    })
+
+    if(params.action == 'tv'){
+        menu.push({
+            title: 'Сегодня в эфире',
+            url: params.action+'/airing_today'
+        })
+
+        menu.push({
+            title: 'На этой неделе',
+            url: params.action+'/on_the_air'
+        })
+    }
+
+    menu.push({
+        title: 'В топе',
+        url: params.action+'/top_rated'
+    })
+    
+    oncomplite(menu)
+}
+
 function full(params = {}, oncomplite, onerror){
     let status = new Status(1)
         status.onComplite = oncomplite
@@ -339,6 +384,7 @@ function clear(){
 export default {
     main,
     menu,
+    menuCategory,
     img,
     full,
     list,
