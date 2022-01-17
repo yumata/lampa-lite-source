@@ -63,7 +63,7 @@ function error(){
 
 function append(data){
     html.find('.videos__body').empty()
-    
+
     let line = $('<div class="videos__line"></div>')
 
     let item = $(`<div class="videos__item videos__movie selector" media="">
@@ -98,14 +98,15 @@ function append(data){
     activity.toggle()
 }
 
-function getId(){
+function getId(call){
     let year = object.movie.number_of_seasons ? object.movie.first_air_date : object.movie.release_date,
-        keys = object.original_name || object.original_title
+        keys = object.movie.original_name || object.movie.original_title
 
     if(year) year = year.slice(0,4)
 
     network.silent('https://kinopoiskapiunofficial.tech/api/v2.1/films/search-by-keyword?keyword='+encodeURIComponent(keys)+' '+year,(data)=>{
-
+        if(data.films.length) call(data.films[0].filmId)
+        else error()
     },error,false,{
         headers: {
             'X-API-KEY': '2d55adfd-019d-4567-bbf7-67d503f61b5a'
