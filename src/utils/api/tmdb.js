@@ -178,10 +178,12 @@ function category(params = {}, oncomplite, onerror){
 function menuCategory(params, oncomplite){
     let menu = []
 
-    menu.push({
-        title: 'Сейчас смотрят',
-        url: params.action+'/now_playing'
-    })
+    if(params.action !== 'tv'){
+        menu.push({
+            title: 'Сейчас смотрят',
+            url: params.action+'/now_playing'
+        })
+    }
 
     menu.push({
         title: 'Популярное',
@@ -216,7 +218,7 @@ function menuCategory(params, oncomplite){
         title: 'В топе',
         url: params.action+'/top_rated'
     })
-    
+
     oncomplite(menu)
 }
 

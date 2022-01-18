@@ -87,7 +87,7 @@ function component(object){
 
         this.append(data)
 
-        this.more()
+        if(total_pages > data.page) this.more()
 
         scroll.append(body)
 
