@@ -2,8 +2,6 @@ function Bazon(params){
     var network = new Lampa.Reguest()
 
     this.start = function(){
-        console.log(params)
-
         if(params.object.movie.kinopoisk_id){
             this.find(params.object.movie.kinopoisk_id)
         }
@@ -47,7 +45,7 @@ function Bazon(params){
             
             if(json) _self.append(json)
     
-        },error,false,{
+        },this.error.bind(this),false,{
             dataType: 'text'
         })
     }
@@ -57,19 +55,18 @@ function Bazon(params){
     
         var line = $('<div class="videos__line"></div>')
     
-        var item = $(`<div class="videos__item videos__movie selector" media="">
-            <div class="videos__item-imgbox videos__movie-imgbox"></div>
-            <div class="videos__item-title">Дублированный</div>
-        </div>`)
+        var item = $('<div class="videos__item videos__movie selector" media=""><div class="videos__item-imgbox videos__movie-imgbox"></div><div class="videos__item-title">Дублированный</div></div>')
     
         var media = {},
             first
-    
-        data.media.forEach((m)=>{
+
+        for(var i = 0; i < data.media.length; i++){
+            var m = data.media[i]
+
             media[m.quality] = m.url
     
             if(m.quality == 'Full HD') first = m.url
-        })
+        }
     
         if(!first) first = data.media[0].url
     

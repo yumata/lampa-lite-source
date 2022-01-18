@@ -131,7 +131,11 @@ function create(data, params = {}){
             }
 
             Player.play(json)
-            Player.playlist([json.url])
+            Player.playlist([{
+                url: json.url,
+                title: json.title,
+                timeline: json.timeline
+            }])
 
             if(json.subtitles) Player.subtitles(json.subtitles)
 
@@ -230,12 +234,9 @@ function create(data, params = {}){
         network.clear()
 
         network.silent(link,(result)=>{
-            body.empty()
-
             last = false
 
             if(result.trim()){
-
                 if(api.split('.').pop() == 'js'){
                     try{
                         js = eval('('+result+')')
@@ -254,6 +255,8 @@ function create(data, params = {}){
                     }
                 }
                 else{
+                    body.empty()
+
                     body.append(result)
 
                     this.parse()

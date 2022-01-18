@@ -243,7 +243,7 @@ select('pages_save_total',{
     '3': '3',
     '4': '4',
     '5': '5',
-},'5')
+},'2')
 
 select('player',{
     'inner': 'Встроенный'
