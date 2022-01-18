@@ -19,6 +19,7 @@ function create(data, params = {}){
     let plugins = $('<div class="videos__plugins videos__line"></div>')
     let body    = $('<div class="videos__body"></div>')
 
+    let js
     let last
     let started
     let history = []
@@ -49,8 +50,10 @@ function create(data, params = {}){
         let query = []
 
         query.push('id='+data.movie.id)
-        query.push('imdb_id='+(data.movie.imdb_id || ''))
-        query.push('kinopoisk_id='+(data.movie.kinopoisk_id || ''))
+
+        if(data.movie.imdb_id)      query.push('imdb_id='+(data.movie.imdb_id || ''))
+        if(data.movie.kinopoisk_id) query.push('kinopoisk_id='+(data.movie.kinopoisk_id || ''))
+
         query.push('title='+encodeURIComponent(data.movie.title || data.movie.name))
         query.push('original_title='+encodeURIComponent(data.movie.original_title || data.movie.original_name))
         query.push('serial='+(data.movie.name ? 1 : 0))
@@ -61,7 +64,7 @@ function create(data, params = {}){
 
         if(api){
             started = true
-
+            
             this.get(api + (api.indexOf('?') >= 0 ? '&' : '?') + query.join('&'),true)
         }
     }
@@ -198,8 +201,29 @@ function create(data, params = {}){
         })
     }
 
+    this.getQuery = function(link) {
+        var s = link,
+            p = s.split(/\&/), l = p.length, kv, r = {}
+
+        if (l === 0) {
+            return false
+        }
+
+        while (l--) {
+            kv = p[l].split(/\=/);
+            r[kv[0]] = decodeURIComponent(kv[1] || '') || true;
+        }
+
+        return r
+    }
+
     this.get = function(link, push_history){
         this.load()
+
+        if(js){
+            js.destroy()
+            js = false
+        }
 
         if(push_history) history.push(link)
 
@@ -211,11 +235,31 @@ function create(data, params = {}){
             last = false
 
             if(result.trim()){
-                body.append(result)
 
-                this.parse()
+                if(api.split('.').pop() == 'js'){
+                    try{
+                        js = eval('('+result+')')
+                        js = new js({
+                            body: body,
+                            html: html,
+                            object: data,
+                            class: this,
+                            query: this.getQuery(link.split('?').slice(1).join('?'))
+                        })
 
-                Controller.enable('view_videos')
+                        js.start()
+                    }
+                    catch(e){
+                        this.empty('Ошибка запуска скрипта',e.stack)
+                    }
+                }
+                else{
+                    body.append(result)
+
+                    this.parse()
+
+                    Controller.enable('view_videos')
+                }
             }
             else  this.empty('Сервер вернул пустой результат')
         },()=>{
@@ -225,12 +269,12 @@ function create(data, params = {}){
         })
     }
 
-    this.empty = function(text){
+    this.empty = function(text,stack){
         last = false
 
         body.empty()
 
-        body.append('<div class="videos__repeat selector">Повторить запрос</div><div class="videos__empty">'+(text || 'Нет подключения к сети')+'</div>')
+        body.append('<div class="videos__repeat selector">Повторить запрос</div><div class="videos__empty">'+(text || 'Нет подключения к сети')+'</div>'+(stack ? '<pre class="videos_stack">'+stack+'</pre>' : ''))
 
         body.find('.selector').on('hover:enter',()=>{
             this.get(history.pop(),true)
@@ -296,6 +340,8 @@ function create(data, params = {}){
 
         scroll.destroy()
 
+        if(js) js.destroy()
+
         Storage.listener.remove('change',follow)
 
         html.remove()
@@ -309,6 +355,7 @@ function create(data, params = {}){
         body    = null
         plugins = null
         history = null
+        js      = null
     }
 }
 

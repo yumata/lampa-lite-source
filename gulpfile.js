@@ -34,6 +34,7 @@ var pubFolder = './public/';
 var bulFolder = './build/';
 var idxFolder = './index/';
 var plgFolder = './plugins/';
+var apiFolder = './api/';
 
 
 function merge(done) {
@@ -106,6 +107,7 @@ function build_web(done){
     copy_timer = setTimeout(()=>{
         src([dstFolder+'app.js']).pipe(dest(bulFolder+'web/'));
         src([dstFolder+'bazon/bazon.js']).pipe(dest(bulFolder+'web/plugins'));
+        src([apiFolder+'*']).pipe(dest(bulFolder+'web/api'));
     },500)
 
     done();
@@ -141,7 +143,7 @@ function sync_github(){
 
 /** Следим за изменениями в файлах **/
 function watch(done){
-    var watcher = chokidar.watch([srcFolder,pubFolder,plgFolder], { persistent: true});
+    var watcher = chokidar.watch([srcFolder,pubFolder,plgFolder,apiFolder], { persistent: true});
 
     var timer;
     var change = function(path){
