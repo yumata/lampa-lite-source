@@ -70,8 +70,6 @@ function create(data, params = {}){
     }
 
     this.plugins = function(){
-        last = false
-
         plugins.empty()
 
         let events = Storage.get('events','[]').filter(e=>e.url)
@@ -100,7 +98,6 @@ function create(data, params = {}){
 
                 this.start()
             })
-
             if(api == a.url) plugin.addClass('active')
 
             plugins.append(plugin)
@@ -118,8 +115,6 @@ function create(data, params = {}){
         plugins.prepend(add)
 
         $('>*',plugins).on('hover:focus',function(){
-            last = $(this)[0]
-
             scroll.update($(this), true)
         })
     }
@@ -234,8 +229,6 @@ function create(data, params = {}){
         network.clear()
 
         network.silent(link,(result)=>{
-            last = false
-
             if(result.trim()){
                 if(api.split('.').pop() == 'js'){
                     try{
@@ -273,8 +266,6 @@ function create(data, params = {}){
     }
 
     this.empty = function(text,stack){
-        last = false
-
         body.empty()
 
         body.append('<div class="videos__repeat selector">Повторить запрос</div><div class="videos__empty">'+(text || 'Нет подключения к сети')+'</div>'+(stack ? '<pre class="videos_stack">'+stack+'</pre>' : ''))
@@ -291,7 +282,7 @@ function create(data, params = {}){
 
         body.empty()
 
-        body.append('<div class="videos__loading selector">Загрузка... <span></span></div>')
+        body.append('<div class="videos__loading">Загрузка... <span></span></div>')
 
         Controller.enable('view_videos')
     }
@@ -300,7 +291,13 @@ function create(data, params = {}){
         Controller.add('view_videos',{
             toggle: ()=>{
                 Controller.collectionSet(this.render())
-                Controller.collectionFocus(last || body.find('.focused')[0], this.render())
+
+                let selectors = $('.selector',body),
+                    focused   = body.find('.focused')[0],
+                    tabactive = $('.active',plugins),
+                    focus     = focused ? focused : selectors.length ? selectors.eq(0)[0] : tabactive.length ? tabactive.eq(0)[0] : false
+
+                Controller.collectionFocus(focus, this.render())
             },
             right: ()=>{
                 Navigator.move('right')

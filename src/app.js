@@ -35,6 +35,8 @@ import Card from './interaction/card'
 import Account from './utils/account'
 import Plugins from './utils/plugins'
 import Socket from './utils/socket'
+import Files from './interaction/files'
+import Background from './interaction/background'
 
 
 window.Lampa = {
@@ -68,7 +70,9 @@ window.Lampa = {
     Card,
     Info,
     Account,
-    Socket
+    Socket,
+    Files,
+    Background
 }
 
 Console.init()
@@ -79,6 +83,8 @@ function startApp(){
 
     setTimeout(()=>{
         $('.welcome').fadeOut(500)
+
+        Keypad.enable()
     },1000)
 
     Lampa.Listener.send('app',{type:'start'})
@@ -159,8 +165,6 @@ function startApp(){
     Activity.last()
 
     setTimeout(()=>{
-        Keypad.enable()
-
         Screensaver.enable()
     },1000)
 

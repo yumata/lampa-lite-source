@@ -35,6 +35,9 @@ function run(name,params){
             }
         }
     }
+    else{
+        toggle('menu')
+    }
 }
 
 /**

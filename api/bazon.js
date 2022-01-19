@@ -11,7 +11,7 @@ function Bazon(params){
     }
 
     this.find = function(id){
-        var url = 'https://ab-ze.xyz/api/hls/movle.m3u8?type='+(params.object.movie.number_of_seasons ? 'tv-se' : 'film')
+        var url = 'https://ab-ze.xyz/api/hls/movie.m3u8?type='+(params.object.movie.number_of_seasons ? 'tv-se' : 'film')
             url = Lampa.Utils.addUrlComponent(url, 'kp=' + id + '&access_token=&quality=&translation=Дубляж')
 
         var _self = this
