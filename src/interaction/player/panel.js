@@ -134,34 +134,6 @@ elems.timeline.on('mousemove',(e)=>{
 
 html.find('.player-panel__line:eq(1) .selector').attr('data-controller', 'player_panel')
 
-elems.quality.text('auto').on('hover:enter',()=>{
-    let qs = []
-
-    for(let i in qualitys){
-        qs.push({
-            title: i,
-            url: qualitys[i]
-        })
-    }
-
-    let enabled = Controller.enabled()
-
-    Select.show({
-        title: 'Качество',
-        items: qs,
-        onSelect: (a)=>{
-            elems.quality.text(a.title)
-
-            listener.send('quality',{name: a.title, url: a.url})
-
-            Controller.toggle(enabled.name)
-        },
-        onBack: ()=>{
-            Controller.toggle(enabled.name)
-        }
-    })
-})
-
 function addController(){
     Controller.add('player_rewind',{
         toggle: ()=>{
@@ -217,6 +189,46 @@ function addController(){
         }
     })
 }
+
+elems.quality.text('auto').on('hover:enter',()=>{
+    if(qualitys){
+        let qs = []
+        
+        if(Arrays.isArray(qualitys)){
+            qs = qualitys
+        }
+        else{
+            for(let i in qualitys){
+                qs.push({
+                    title: i,
+                    url: qualitys[i]
+                })
+            }
+        }
+
+        if(!qs.length) return
+
+        let enabled = Controller.enabled()
+
+        Select.show({
+            title: 'Качество',
+            items: qs,
+            onSelect: (a)=>{
+                elems.quality.text(a.title)
+
+                a.enabled = true
+
+                if(!Arrays.isArray(qualitys)) listener.send('quality',{name: a.title, url: a.url})
+
+                Controller.toggle(enabled.name)
+            },
+            onBack: ()=>{
+                Controller.toggle(enabled.name)
+            }
+        })
+    }
+})
+
 
 /**
  * Выбор аудиодорожки
@@ -509,26 +521,10 @@ function setTracks(tr, if_no){
     elems.tracks.toggleClass('hide',false)
 }
 
-/**
- * Уничтожить
- */
-function destroy(){
-    last = false
+function setLevels(levels, current){
+    qualitys = levels
 
-    condition = {}
-    tracks    = []
-    subs      = []
-
-    elems.peding.css({width: 0})
-    elems.position.css({width: 0})
-    elems.time.text('00:00')
-    elems.timenow.text('00:00')
-    elems.timeend.text('00:00')
-
-    elems.subs.toggleClass('hide',true)
-    elems.tracks.toggleClass('hide',true)
-
-    html.toggleClass('panel--paused',false)
+    elems.quality.text(current)
 }
 
 function quality(qs,url){
@@ -541,6 +537,30 @@ function quality(qs,url){
             if(qs[i] == url) elems.quality.text(i)
         }
     } 
+}
+
+/**
+ * Уничтожить
+ */
+function destroy(){
+    last = false
+
+    condition = {}
+    tracks    = []
+    subs      = []
+    qualitys  = false
+
+    elems.peding.css({width: 0})
+    elems.position.css({width: 0})
+    elems.time.text('00:00')
+    elems.timenow.text('00:00')
+    elems.timeend.text('00:00')
+    elems.quality.text('auto')
+
+    elems.subs.toggleClass('hide',true)
+    elems.tracks.toggleClass('hide',true)
+
+    html.toggleClass('panel--paused',false)
 }
 
 function render(){
@@ -559,6 +579,7 @@ export default {
     rewind,
     setTracks,
     setSubs,
+    setLevels,
     mousemove,
     quality
 }

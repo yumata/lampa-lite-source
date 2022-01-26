@@ -94,6 +94,7 @@ function bind(){
     // сколько прошло
     video.addEventListener('timeupdate', function() {
         listener.send('timeupdate', {duration: video.duration, current: video.currentTime})
+        listener.send('videosize',{width: video.videoWidth, height: video.videoHeight})
 
         scale()
 
@@ -116,7 +117,9 @@ function bind(){
 
         e.text = e.text.trim()
 
-        $('> div',subtitles).html(e.text ? e.text : '&nbsp;')
+        $('> div',subtitles).html(e.text ? e.text : '&nbsp;').css({
+            display: e.text ? 'inline-block' : 'none'
+        })
     })
 
     video.addEventListener('loadedmetadata', function (e) {
@@ -217,12 +220,29 @@ function scale(){
  * Смотрим есть ли дорожки и сабы
  */
 function loaded(){
-    let tracks = video.audioTracks
-    let subs   = video.customSubs || video.textTracks
+    let tracks = []
+    let subs   = video.customSubs || video.textTracks || []
+
+    if(hls && hls.audioTracks && hls.audioTracks.length){
+        tracks = hls.audioTracks
+
+        tracks.forEach(track=>{
+            if(hls.audioTrack == track.id) track.selected = true
+
+            Object.defineProperty(track, "enabled", {
+                set: (v)=>{
+                    if(v) hls.audioTrack = track.id
+                },
+                get: ()=>{}
+            })
+        })
+        
+    }   
+	else if(video.audioTracks && video.audioTracks.length) tracks = video.audioTracks
 
     if(webos && webos.sourceInfo) tracks = []
 
-    if(tracks && tracks.length){
+    if(tracks.length){
         if(!Arrays.isArray(tracks)){
             let new_tracks = []
 
@@ -236,7 +256,7 @@ function loaded(){
         listener.send('tracks', {tracks: tracks})
     }
 
-    if(subs && subs.length){
+    if(subs.length){
         if(!Arrays.isArray(subs)){
             let new_subs = []
 
@@ -249,6 +269,29 @@ function loaded(){
 
         listener.send('subs', {subs: subs})
     }
+
+    if(hls && hls.levels){
+        let current_level = 'AUTO'
+
+        hls.levels.forEach((level,i)=>{
+            level.title = level.qu ? level.qu : level.width + 'x' + level.height
+
+            if(hls.currentLevel == i){
+                current_level  = level.title
+
+                level.selected = true
+            } 
+
+            Object.defineProperty(level, "enabled", {
+                set: (v)=>{
+                    if(v) hls.currentLevel = i
+                },
+                get: ()=>{}
+            })
+        })
+
+        listener.send('levels', {levels: hls.levels, current: current_level})
+    }
 }
 
 function customSubs(subs){
@@ -258,7 +301,7 @@ function customSubs(subs){
 
     customsubs.listener.follow('subtitle',(e)=>{
         $('> div',subtitles).html(e.text ? e.text : '&nbsp;').css({
-            display: e.text ? 'inline-block' : 'hide'
+            display: e.text ? 'inline-block' : 'none'
         })
     })
 
@@ -337,12 +380,15 @@ function create(){
         webos = new WebOS(video)
         webos.callback = ()=>{
             let src = video.src
+            let sub = video.customSubs
 
             console.log('WebOS','video loaded')
 
             $(video).remove()
 
             url(src)
+
+            video.customSubs = sub
 
             webos.repet(video)
 
@@ -368,7 +414,7 @@ function loader(status){
  * Устанавливаем ссылку на видео
  * @param {String} src 
  */
-function url(src){
+ function url(src){
     loader(true)
 
     if(hls){
@@ -386,9 +432,16 @@ function url(src){
             try{
                 hls = new Hls()
                 hls.attachMedia(video)
-
-                hls.on(Hls.Events.MEDIA_ATTACHED, ()=> {
-                    hls.loadSource(src)
+                hls.loadSource(src)
+                hls.on(Hls.Events.ERROR, function (event, data){
+                    if(data.details === Hls.ErrorDetails.MANIFEST_PARSING_ERROR){
+                        if(data.reason === "no EXTM3U delimiter") {
+                            load(src)
+                        }
+                    }
+                })
+                hls.on(Hls.Events.MANIFEST_LOADED, function(){
+                    play()
                 })
             }
             catch(e){
@@ -400,14 +453,14 @@ function url(src){
         else load(src)
     }
     else load(src)
-
-    play()
 }
 
 function load(src){
     video.src = src
 
     video.load()
+
+    play()
 }
 
 /**
@@ -588,12 +641,17 @@ function destroy(){
 
     if(webos) webos.destroy()
 
+    webos = null
+
     if(hls){
         hls.destroy()
         hls = false
     }
 
-    webos = null
+    if(customsubs){
+        customsubs.destroy()
+        customsubs = false
+    }
 
     if(video){
         if(video.destroy) video.destroy()

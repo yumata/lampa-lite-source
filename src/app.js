@@ -12,6 +12,7 @@ import Menu from './components/menu'
 import Utils from './utils/math'
 import Console from './interaction/console'
 import Params from './components/settings/params'
+import Input from './components/settings/input'
 import Screensaver from './interaction/screensaver'
 import Android from './utils/android'
 import Subscribe from './utils/subscribe'
@@ -72,7 +73,9 @@ window.Lampa = {
     Account,
     Socket,
     Files,
-    Background
+    Background,
+    Input,
+    Screensaver
 }
 
 Console.init()
@@ -190,6 +193,10 @@ function startApp(){
             if(e.name === 'reset_player'){
                 Android.resetDefaultPlayer()
             }
+        })
+
+        Favorite.listener.follow('add,added,remove', (e)=>{
+            Android.updateChannel(e.where)
         })
     }
 

@@ -189,5 +189,6 @@ export default {
     enable,
     render,
     disable,
-    isWorked
+    isWorked,
+    stopSlideshow
 }

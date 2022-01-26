@@ -89,6 +89,10 @@ Video.listener.follow('subs', (e)=>{
     Panel.setSubs(e.subs)
 })
 
+Video.listener.follow('levels', (e)=>{
+    Panel.setLevels(e.levels, e.current)
+})
+
 Video.listener.follow('videosize', (e)=>{
     Info.set('size', e)
 })
@@ -242,6 +246,23 @@ function toggle(){
     Controller.toggle('player')
 }
 
+function togglePreload(){
+    Controller.add('player_preload',{
+        invisible: true,
+        toggle: ()=>{
+            
+        },
+        enter: ()=>{
+            Panel.update('peding','0%')
+
+            preloader.wait = false
+            preloader.call()
+        },
+        back: backward
+    })
+
+    Controller.toggle('player_preload')
+}
 
 function backward(){
     destroy()
@@ -324,6 +345,9 @@ function runWebOS(params){
 }
 
 
+function preload(data, call){
+    call()
+}
 
 /**
  * Запустит плеер
@@ -333,6 +357,8 @@ function play(data){
     console.log('Player','url:',data.url)
 
     if(Platform.is('webos') && Storage.field('player') == 'webos'){
+        data.url = data.url.replace('&preload','&play')
+
         runWebOS({
             need: 'com.webos.app.photovideo',
             url: data.url,
@@ -340,28 +366,34 @@ function play(data){
         })
     } 
     else if(Platform.is('android') && Storage.field('player') == 'android'){
+        data.url = data.url.replace('&preload','&play')
+
         Android.openPlayer(data.url, data)
     }
     else{
-        work = data
-        
-        if(work.timeline) work.timeline.continued = false
+        preload(data, ()=>{
+            work = data
+            
+            if(work.timeline) work.timeline.continued = false
 
-        Playlist.url(data.url)
+            Playlist.url(data.url)
 
-        Panel.quality(data.quality,data.url)
+            Panel.quality(data.quality,data.url)
 
-        Video.url(data.url)
+            Video.url(data.url)
 
-        Video.size(Storage.get('player_size','default'))
+            Video.size(Storage.get('player_size','default'))
 
-        Info.set('name',data.title)
-        
-        if(!preloader.call) $('body').append(html)
+            if(data.subtitles) Video.customSubs(data.subtitles)
 
-        toggle()
+            Info.set('name',data.title)
+            
+            if(!preloader.call) $('body').append(html)
 
-        Panel.show(true)
+            toggle()
+
+            Panel.show(true)
+        })
     }
 }
 
@@ -385,7 +417,7 @@ function playlist(playlist){
  * Установить субтитры
  * @param {Array} subs 
  */
- function subtitles(subs){
+function subtitles(subs){
     if(work || preloader.wait){
         Video.customSubs(subs)
     } 
