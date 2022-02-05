@@ -51,7 +51,7 @@ function create(){
         let params = {
             align_left: true,
             object: {
-                source: 'tmdb'
+                source: 'cub'
             }
         }
 
