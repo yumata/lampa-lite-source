@@ -183,6 +183,43 @@
         }
     }
 
+    &__torrent{
+        width: 100%;
+        background-color: #393a44;
+        position: relative;
+        margin-bottom: 1.4em;
+
+        &-title{
+            font-size: 1.6em;
+            padding: 15px;
+        }
+
+        .videos__item-title{
+            padding: 11px 15px;
+            background: #75757c47;
+            height: auto;
+            margin: 0;
+        }
+
+        &.focus:after {
+            content: "";
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border: 0.3em solid #d81f26;
+        }
+
+        .time-line{
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 100%;
+        }
+    }
+
     &__button{
         background-color: #393A44;
         padding: 0.7em 1em;

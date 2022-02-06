@@ -337,6 +337,9 @@ trigger('internal_torrclient', true)
 trigger('subtitles_stroke', true);
 trigger('subtitles_backdrop', false);
 trigger('screensaver', true)
+trigger('torrserver_savedb',false)
+trigger('torrserver_preload', false);
+trigger('torrserver_auth',false)
 
 /**
  * Добовляем поля
@@ -345,6 +348,10 @@ select('cloud_token','','')
 select('account_email','','')
 select('account_password','','')
 select('device_name','','Lampa-Lite')
+select('torrserver_url','','')
+select('torrserver_url_two','','')
+select('torrserver_login','','')
+select('torrserver_password','','')
 
 
 export default {

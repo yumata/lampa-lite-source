@@ -22,6 +22,12 @@ let html = `<div>
         </div>
         <div class="settings-folder__name">Плеер</div>
     </div>
+    <div class="settings-folder selector" data-component="server">
+        <div class="settings-folder__icon">
+            <img src="./img/icons/settings/server.svg" />
+        </div>
+        <div class="settings-folder__name">TorrServer</div>
+    </div>
     <div class="settings-folder selector" data-component="plugins">
         <div class="settings-folder__icon">
             <svg height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">

@@ -11,6 +11,7 @@ import Utils from '../../utils/math'
 import Favorite from '../../utils/favorite'
 import Modal from '../../interaction/modal'
 import Template from '../../interaction/template'
+import Torrent from '../../interaction/torrent'
 
 function create(data, params = {}){
     let network = new Reguest()
@@ -135,6 +136,11 @@ function create(data, params = {}){
             if(json.subtitles) Player.subtitles(json.subtitles)
 
             if(data.movie.id) Favorite.add('history', data.movie, 100)
+        }
+        else if(json.method == 'torrent'){
+            json.poster = data.movie.img
+
+            Torrent.start(json, data.movie)
         }
         else if(json.method == 'link' && json.url){
             this.get(json.url,true)

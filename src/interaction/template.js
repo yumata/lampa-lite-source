@@ -11,6 +11,7 @@ import settings_more from '../templates/settings/more'
 import settings_plugins from '../templates/settings/plugins'
 import settings_cloud from '../templates/settings/cloud'
 import settings_account from '../templates/settings/account'
+import settings_server from '../templates/settings/server'
 import items_line from '../templates/items/line'
 import card from '../templates/card'
 import player from '../templates/player'
@@ -39,6 +40,12 @@ import screensaver from "../templates/screensaver";
 import view from "../templates/view";
 import events from "../templates/events";
 import events_item from "../templates/events_item";
+import torrent from '../templates/torrent/item'
+import torrent_file from '../templates/torrent/file'
+import torrent_noconnect from '../templates/torrent/errors/noconnect'
+import torrent_nocheck from '../templates/torrent/errors/nocheck'
+import torrent_nohash from '../templates/torrent/errors/nohash'
+import torrent_file_serial from '../templates/torrent/serial'
 
 let templates = {
     wrap,
@@ -53,6 +60,7 @@ let templates = {
     settings_plugins,
     settings_cloud,
     settings_account,
+    settings_server,
     scroll,
     items_line,
     card,
@@ -81,7 +89,13 @@ let templates = {
     screensaver,
     view,
     events,
-    events_item
+    events_item,
+    torrent,
+    torrent_file,
+    torrent_noconnect,
+    torrent_file_serial,
+    torrent_nocheck,
+    torrent_nohash,
 }
 
 function get(name, vars = {}, like_static = false){

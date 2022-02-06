@@ -8,6 +8,7 @@ import Playlist from './player/playlist'
 import Storage from '../utils/storage'
 import Platform from '../utils/platform'
 import Screensaver from './screensaver'
+import Torserver from './torserver'
 import Reguest from '../utils/reguest'
 import Android from '../utils/android'
 
@@ -175,6 +176,8 @@ Playlist.listener.follow('select',(e)=>{
     destroy()
 
     play(e.item)
+
+    if(e.item.url.indexOf(Torserver.ip()) > -1) Info.set('stat',e.item.url)
 })
 
 Info.listener.follow('stat',(e)=>{
@@ -346,7 +349,28 @@ function runWebOS(params){
 
 
 function preload(data, call){
-    call()
+    if(data.url.indexOf(Torserver.ip()) > -1 && data.url.indexOf('&preload') > -1){
+        preloader.wait = true
+
+        Info.set('name',data.title)
+
+        $('body').append(html)
+
+        Panel.show(true)
+
+        togglePreload()
+
+        network.timeout(2000)
+
+        network.silent(data.url)
+
+        preloader.call = ()=>{
+            data.url = data.url.replace('&preload','&play')
+
+            call()
+        }
+    }
+    else call()
 }
 
 /**

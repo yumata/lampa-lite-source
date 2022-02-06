@@ -216,12 +216,4 @@ function startApp(){
 // принудительно стартовать
 setTimeout(startApp,1000*5)
 
-if(!Storage.get('install_events','')){
-    Storage.set('install_events',true)
-
-    let events = Storage.get('plugins','[]').filter(e=>e.url == 'http://jin.energy/lite.js')
-
-    if(!events.length) Storage.add('plugins','http://jin.energy/lite.js')
-}
-
 Plugins.load(startApp)
