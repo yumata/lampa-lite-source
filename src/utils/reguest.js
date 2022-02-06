@@ -328,6 +328,11 @@ function create(){
                 if(params.end) params.end();
             },
             beforeSend: (xhr) => {
+                let use = Storage.field('torrserver_auth')
+				let srv = Storage.get(Storage.field('torrserver_use_link') == 'two' ? 'torrserver_url_two' : 'torrserver_url')
+
+				if(use && params.url.indexOf(srv) > -1) xhr.setRequestHeader("Authorization", "Basic " + Base64.encode(Storage.get('torrserver_login')+':'+Storage.get('torrserver_password')))
+
                 if(params.beforeSend){
                     xhr.setRequestHeader(params.beforeSend.name, params.beforeSend.value)
                 }
