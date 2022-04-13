@@ -4,7 +4,7 @@ import Arrays from '../arrays'
 import Storage from '../storage'
 import Status from '../status'
 
-let baseurl   = Utils.protocol() + 'apitm.kulik.uz/3/'
+let baseurl   = Utils.protocol() + 'apitmdb.cub.watch/3/'
 let baseimg   = Utils.protocol() + 'imagetmdb.cub.watch/t/p/w200/'
 let network   = new Reguest()
 let key       = '4ef0d7355d9ffb5151e987764708ce96'
