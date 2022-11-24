@@ -180,6 +180,7 @@ function browser_sync(done) {
         server: {
             baseDir: bulFolder+'web/'
         },
+        port: 3020,
         open: false,
         notify: false
     });
