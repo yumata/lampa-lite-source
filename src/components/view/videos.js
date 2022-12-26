@@ -32,15 +32,15 @@ function create(data, params = {}){
         }
     }
 
-    function metaData(query){
-        query.push('uid='+Storage.get('device_uid'))
-        
-        if(Storage.get('account_email','')){
-            query.push('cub_id='+Utils.hash(Storage.get('account_email','')))
-            query.push('account_email='+encodeURIComponent(Storage.get('account_email','')))
+    function metaData(url){
+        let email = Storage.get('account_email','')
+
+        if(email && url.indexOf('account_email') == -1){
+            url = Utils.addUrlComponent(url, 'account_email=' + encodeURIComponent(email))
+            url = Utils.addUrlComponent(url, 'cub_id=' + Utils.hash(email))
         }
 
-        return query
+        return url
     }
 
     this.create = function(){
@@ -72,8 +72,7 @@ function create(data, params = {}){
         query.push('serial=' + (data.movie.name ? 1 : 0))
         query.push('year='+((data.movie.release_date || data.movie.first_air_date || '0000') + '').slice(0,4))
         query.push('source=' + Storage.field('source'))
-        
-        query = metaData(metaData)
+        query.push('uid='+Storage.get('device_uid'))
 
         if(api){
             started = true
