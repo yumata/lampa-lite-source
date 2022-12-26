@@ -32,6 +32,17 @@ function create(data, params = {}){
         }
     }
 
+    function metaData(query){
+        query.push('uid='+Storage.get('device_uid'))
+        
+        if(Storage.get('account_email','')){
+            query.push('cub_id='+Utils.hash(Storage.get('account_email','')))
+            query.push('account_email='+encodeURIComponent(Storage.get('account_email','')))
+        }
+
+        return query
+    }
+
     this.create = function(){
         html.append(scroll.render())
 
@@ -61,12 +72,8 @@ function create(data, params = {}){
         query.push('serial=' + (data.movie.name ? 1 : 0))
         query.push('year='+((data.movie.release_date || data.movie.first_air_date || '0000') + '').slice(0,4))
         query.push('source=' + Storage.field('source'))
-        query.push('uid='+Storage.get('device_uid'))
         
-        if(Storage.get('account_email','')){
-            query.push('cub_id='+Utils.hash(Storage.get('account_email','')))
-            query.push('account_email='+encodeURIComponent(Storage.get('account_email','')))
-        }
+        query = metaData(metaData)
 
         if(api){
             started = true
@@ -167,7 +174,7 @@ function create(data, params = {}){
                 onBack: close
             })
 
-            network.silent(json.url,(result)=>{
+            network.silent(metaData(json.url),(result)=>{
                 close()
 
                 this.call(target, result)
@@ -239,7 +246,7 @@ function create(data, params = {}){
 
         network.clear()
 
-        network.silent(link,(result)=>{
+        network.silent(metaData(link),(result)=>{
             if(result.trim()){
                 if(api.split('.').pop() == 'js'){
                     try{
