@@ -63,7 +63,10 @@ function create(data, params = {}){
         query.push('source=' + Storage.field('source'))
         query.push('uid='+Storage.get('device_uid'))
         
-        if(Storage.get('account_email','')) query.push('cub_id='+Utils.hash(Storage.get('account_email','')))
+        if(Storage.get('account_email','')){
+            query.push('cub_id='+Utils.hash(Storage.get('account_email','')))
+            query.push('account_email='+encodeURIComponent(Storage.get('account_email','')))
+        }
 
         if(api){
             started = true
