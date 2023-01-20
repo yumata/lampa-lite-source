@@ -156,6 +156,9 @@ function create(data, params = {}){
         else if(json.method == 'link' && json.url){
             this.get(json.url,true)
         }
+        else if(json.method == 'show' && json.text){
+            Noty.show(json.text)
+        }
         else if(json.method == 'call' && json.url){
             function close(){
                 Modal.close()
