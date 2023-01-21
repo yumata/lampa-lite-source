@@ -157,7 +157,7 @@ function create(data, params = {}){
             this.get(json.url,true)
         }
         else if(json.method == 'show' && json.text){
-            Noty.show(json.text)
+            Noty$1.show(json.text)
         }
         else if(json.method == 'call' && json.url){
             function close(){
