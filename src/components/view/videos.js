@@ -12,6 +12,7 @@ import Favorite from '../../utils/favorite'
 import Modal from '../../interaction/modal'
 import Template from '../../interaction/template'
 import Torrent from '../../interaction/torrent'
+import Noty from '../../interaction/noty'
 
 function create(data, params = {}){
     let network = new Reguest()
