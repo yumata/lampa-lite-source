@@ -23,13 +23,8 @@ let html = `<div>
 
     <div class="settings-param-title settings--account-signin"><span>Авторизация</span></div>
 
-    <div class="settings-param selector settings--account-signin" data-type="input" data-name="account_email" placeholder="Не указан">
-        <div class="settings-param__name">Email</div>
-        <div class="settings-param__value"></div>
-    </div>
-
-    <div class="settings-param selector settings--account-signin" data-type="input" data-string="true" data-name="account_password" placeholder="Не указан">
-        <div class="settings-param__name">Пароль</div>
+    <div class="settings-param selector settings--account-signin settings--account-device-add" data-type="button" data-static="true">
+        <div class="settings-param__name">Выполнить вход</div>
         <div class="settings-param__value"></div>
     </div>
 

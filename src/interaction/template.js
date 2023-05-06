@@ -46,6 +46,7 @@ import torrent_noconnect from '../templates/torrent/errors/noconnect'
 import torrent_nocheck from '../templates/torrent/errors/nocheck'
 import torrent_nohash from '../templates/torrent/errors/nohash'
 import torrent_file_serial from '../templates/torrent/serial'
+import account_add_device from '../templates/account_add_device'
 
 let templates = {
     wrap,
@@ -96,6 +97,7 @@ let templates = {
     torrent_file_serial,
     torrent_nocheck,
     torrent_nohash,
+    account_add_device
 }
 
 function get(name, vars = {}, like_static = false){

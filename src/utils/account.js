@@ -7,6 +7,9 @@ import Noty from '../interaction/noty'
 import Controller from '../interaction/controller'
 import Favorite from './favorite'
 import Arrays from './arrays'
+import Input from '../components/settings/input'
+import Template from '../interaction/template'
+import Modal from '../interaction/modal'
 
 let body
 let network   = new Reguest()
@@ -32,14 +35,6 @@ function init(){
             renderPanel()
 
             check()
-        }
-    })
-
-    Storage.listener.follow('change',(e)=>{
-        if(e.name == 'account_email' || e.name == 'account_password'){
-            signin()
-
-            if(e.name == 'account_password') Storage.set('account_password','',true)
         }
     })
 
@@ -149,6 +144,60 @@ function renderStatus(name, value = ''){
     }
 }
 
+function addDevice(){
+    let displayModal = ()=>{
+        let html = Template.get('account_add_device')
+
+        html.find('.selector').on('hover:enter',()=>{
+            Modal.close()
+
+            Input.edit({
+                free: true,
+                title: 'Введите шестизначный код',
+                nosave: true,
+                value: ''
+            },(new_value)=>{
+                let code = parseInt(new_value)
+
+                if(new_value && new_value.length == 6 && !isNaN(code)){
+                    network.clear()
+
+                    network.silent(api + 'device/add',(result)=>{
+
+                        Storage.set('account',result,true)
+                        Storage.set('account_email',result.email,true)
+
+                        window.location.reload()
+                    },()=>{
+
+                        Noty.show('Возможно, вы ввели неверный или устаревший код')
+                    },{
+                        code
+                    })
+                }
+                else{
+                    displayModal()
+
+                    Noty.show('Возможно, вы указали неверный формат')
+                }
+            })
+        })
+
+        Modal.open({
+            title: '',
+            html: html,
+            size: 'small',
+            onBack: ()=>{
+                Modal.close()
+
+                Controller.toggle('settings_component')
+            }
+        })
+    }
+
+    displayModal()
+}
+
 function renderPanel(){
     if(body){
         let account = Storage.get('account','{}')
@@ -156,6 +205,8 @@ function renderPanel(){
         
         body.find('.settings--account-signin').toggleClass('hide',signed)
         body.find('.settings--account-user').toggleClass('hide',!signed)
+
+        body.find('.settings--account-device-add').on('hover:enter',addDevice)
 
         if(account.token){
             body.find('.settings--account-user-info .settings-param__value').text(account.email)
